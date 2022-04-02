@@ -3,6 +3,7 @@ import re
 
 from spam_units import Unit, IP, Port
 from telethon import TelegramClient, events
+from winger import Winger
 
 # api_id and api_hash from https://my.telegram.org, under API Development.
 api_id = 15915117
@@ -34,12 +35,17 @@ def msg_parse_units(message: str) -> [Unit]:
 
             for port_str in port_strs:
                 port = Port(port_str[0])
-                port.protocol = port_str[1].upper()
+                port.protocol = port_str[1].lower()
                 ip.ports.append(port)
             unit.ips.append(ip)
         units.append(unit)
 
     return units
+
+
+def attack(units: [Unit]):
+    for unit in units:
+        Winger(unit).attack()
 
 
 async def main():
@@ -51,6 +57,14 @@ async def main():
 
     @client.on(events.NewMessage(pattern=pattern))
     async def handler(event):
+        # check whether the message contains any IP
+        ips = re.compile(
+            r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',
+            re.M
+        ).findall(event.message)
+        if len(ips) == 0:
+            return
+
         units = msg_parse_units(event.message.message)
         print(units)
 
