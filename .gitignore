@@ -21,3 +21,4 @@ venv.bak
 
 # Telegram
 *.session
+*.session-journal

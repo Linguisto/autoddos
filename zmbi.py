@@ -61,12 +61,12 @@ async def main():
         ips = re.compile(
             r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',
             re.M
-        ).findall(event.message)
+        ).findall(event.message.message)
         if len(ips) == 0:
             return
 
         units = msg_parse_units(event.message.message)
-        print(units)
+        attack(units)
 
     await client.run_until_disconnected()
 
