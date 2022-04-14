@@ -1,6 +1,8 @@
 import shlex
 import sys
 import asyncio
+import time
+
 from spam_units import Unit
 
 
@@ -22,6 +24,7 @@ class Winger:
             '1200',
             '--http-methods',
             'GET',
+            'POST',
             'STRESS',
             # '--debug'
         ]
@@ -32,9 +35,11 @@ class Winger:
             stderr=asyncio.subprocess.STDOUT
         )
 
+        t = time.time()
         while True:
             line = await proc.stdout.readline()
-            if not line:
+            if not line or time.time() - t > 3600:
+                proc.terminate()
                 break
             print(f'{line.decode().rstrip()}')
 
