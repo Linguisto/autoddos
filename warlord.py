@@ -3,27 +3,16 @@ import dotenv
 import re
 import parser
 
-from dotenv import load_dotenv
 from telethon import TelegramClient, events
-
 from spam_units import Unit
 from winger import Winger
-
-load_dotenv()
 
 conf = dotenv.dotenv_values()
 
 api_id = conf.get('tg_api_id')
 api_hash = conf.get('tg_api_hash')
 
-if api_id is None or api_hash is None:
-    api_id = int(input('Введіть ваш api_id: '))
-    api_hash = input('Введіть ваш api_hash: ')
-    with open('.env', 'w') as env:
-        env.write('tg_api_id=' + str(api_id) + '\n')
-        env.write('tg_api_hash=' + api_hash)
-
-client = TelegramClient('f.russia', api_id, api_hash)
+client = TelegramClient('f.russia', int(api_id), api_hash)
 
 
 async def attack(units: [Unit]):
